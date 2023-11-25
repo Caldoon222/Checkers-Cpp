@@ -39,8 +39,6 @@ public:
         StartBoard();
     }
 
-    std::vector<std::vector<PieceType>> board;
-
     void PrintBoard() {
         std::cout << "   0   1   2   3   4   5   6   7  \n";
         for (int i = 0; i < boardsize; ++i) {
@@ -63,6 +61,27 @@ public:
                 }
 
             }
+
+            //////////////////////////////////TurnInfo\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+            if (i == 3)
+            {
+                std::cout << "                    Turn #" << turnnumber;
+                turnnumber++;
+            }
+
+            if (i == 4 && turncheck % 2 == 0)
+            {
+                std::cout << "                  Black turn!";
+                turncheck++;
+            } else if (i == 4 && turncheck % 2 == 1) {
+
+                std::cout << "                  White turn!";
+                turncheck++;
+            }
+
+            //////////////////////////////////TurnInfo\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
             std::cout << '\n';
         }
     }
@@ -86,56 +105,109 @@ public:
     }
 
 
-    bool isMoveOK(Position& from, Position& to, bool isYourTurn) {
-        // TODO: Implement logic to check if the move is valid
-        if (from.posX == 0)
+    bool isMoveOK(Position& from, Position& to) {
+       
+        if (to.posX < 0 || to.posX > 7 || to.posY < 0 || to.posY > 7)
         {
-            //std::cout << "XOD GOVNO";
-           // return false;
+
+
+            std::cout << "XOD GOVNO";
+            return false;
         }
-        // This would involve checking if the move is within bounds, if there's a piece at the 'from' position,
-        // if the 'to' position is empty, and if the move follows the rules of the game.
-        return true; // Placeholder, replace with actual logic
+
+        if (board[from.posX][from.posY] == PieceType::EMPTY) 
+        {
+            std::cout << "XOD GOVNO";
+            return false;
+        }
+        
+
+        return true;
     }
 
     void Move(Position& from, Position& to) {
-        std::cout << "MOVE";
-   
-        board[to.posX][to.posY] = board[from.posX][from.posY];
-        board[from.posX][from.posY] = PieceType::EMPTY;
+        std::cout <<'\n';//"MOVE\n";
+
+
+
+
+        std::cout << "\nPlease enter youre move from(X,Y): " << '\n';
+        std::cin >> from.posX >> from.posY;
+
+
+        while (from.posX < 0 || from.posX > 7 || from.posY < 0 || from.posY > 7) {
+
+            std::cout << "Incorrect input. Enter numbers between 0 and 7.\n" << "Please enter youre move from(X,Y): \n";
+            std::cin >> from.posX >> from.posY;
+        }
+
+        std::cout << "Please enter youre move to(X,Y): " << '\n';
+        std::cin >> to.posX >> to.posY;
+
+        while (to.posX < 0 || to.posX > 7 || to.posY < 0 || to.posY > 7) {
+            std::cout << "Incorrect input. Enter numbers between 0 and 7.\n" << "Please enter youre move to(X,Y): \n";
+            std::cin >> to.posY >> to.posX;
+        }
+
+        if (!(board[to.posX][to.posY] == PieceType::EMPTY))
+        {
+
+        }
+
+            board[to.posX][to.posY] = board[from.posX][from.posY];
+            board[from.posX][from.posY] = PieceType::EMPTY;
+
+
+
+
+
+
+
+        if (board[to.posX][to.posY] == PieceType::WHITE)
+        {
+
+            
+            board[to.posX-1][to.posY-1] = PieceType::BLACK;
+            board[to.posX][to.posY] = PieceType::EMPTY;
+            //or
+
+            //board[to.posX][to.posY] = board[from.posX][from.posY];
+            //board[from.posX][from.posY] = PieceType::EMPTY;
+            //board[to.posX][to.posY] = PieceType::EMPTY;
+            //board[to.posX - 1][to.posY - 1] = PieceType::BLACK;
+        }
+            
+        //if (board[to.posX][to.posY] == PieceType::BLACK)
+        //{
+        //    board[to.posX][to.posY] = board[from.posX][from.posY];
+        //    board[from.posX][from.posY] = PieceType::EMPTY;
+        //    board[to.posX][to.posY] = PieceType::EMPTY;
+        //    board[to.posX + 1][to.posY + 1] = PieceType::WHITE;
+
+        //    //or
+        //    
+        //    //board[to.posX][to.posY] = board[from.posX][from.posY];
+        //    //board[from.posX][from.posY] = PieceType::EMPTY;
+        //    //board[to.posX][to.posY] = PieceType::EMPTY;
+        //    //board[to.posX - 1][to.posY - 1] = PieceType::WHITE;
+        //    
+        //}
+
+
+
+
 
     }
 
 
    
+private:
+    int turnnumber = 1;
+    int turncheck = 0;
 
+    std::vector<std::vector<PieceType>> board;
 
 };
-
-//
-//
-//void EnterMove() {
-//
-//    int posY = 0;
-//    int posX = 0;
-//
-//    Position from = { posY,posX };
-//    Position to = { posY, posX };
-//
-//    std::cin >> from.posY >> from.posX;
-//    std::cout << "Please enter youre move to(Y, X) : " << '\n';
-//    std::cin >> to.posY >> to.posX;
-//
-//
-//    while (from.posX < 0 || from.posX > 7 || from.posY < 0 || from.posY > 7)
-//    {
-//        std::cout << "Incorrect input. Enter numbers between 0 and 7.\n" << "Move piece\n";//runs if input out of range
-//        std::cin >> from.posY >> from.posX;
-//        std::cout << "Please enter youre move to(Y, X) : " << '\n';
-//        std::cin >> to.posY >> to.posX;
-//    }
-//
-//}
 
 
 
@@ -146,57 +218,13 @@ int main() {
     checkerboard.PrintBoard();
     
 
-    int turncheck = 0;
+    while (GameIsRunning()) 
+    {
 
-    while (GameIsRunning()) {
+      checkerboard.Move(from, to);
+      checkerboard.PrintBoard();
 
-        if (turncheck % 2 == 0) {
-            std::cout << "Black turn!\t Please enter youre move from (X,Y): " << '\n';
-            turncheck++;
-        }
-        else {
-            std::cout << "White turn!\t Please enter youre move from (X,Y): " << '\n';
-            turncheck++;
-        }
-
-
-        //////////////////////////void EnterMove()\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\  
-            std::cin >> from.posX >> from.posY;
-   
-
-            while (from.posX < 0 || from.posX > 7 || from.posY < 0 || from.posY > 7) {
-
-                std::cout << "Incorrect input. Enter numbers between 0 and 7.\n" << "Please enter youre move from(X,Y) : \n";
-                std::cin >> from.posX >> from.posY;
-            }
-
-            std::cout << "Please enter youre move to(X,Y) : " << '\n';  
-            std::cin >> to.posX >> to.posY;
-
-            while (to.posX < 0 || to.posX > 7 || to.posY < 0 || to.posY > 7) {
-                std::cout << "Incorrect input. Enter numbers between 0 and 7.\n" << "Please enter youre move to(X,Y) : \n";
-                std::cin >> to.posY >> to.posX;
-            }
-         //////////////////////////void EnterMove()\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
  
-
-
-        bool isYourTurn = true;
-        if (checkerboard.isMoveOK(from, to, isYourTurn)) {
-            std::cout << "\n\n";
-            std::cout << "The move is valid.\n";
-            checkerboard.Move(from, to);
-
-            std::cout << "\n\n";
-            checkerboard.PrintBoard(); // Print the board after the move
-        }
-        else {
-            std::cout << "The move is invalid.\n";
-        }
-
-
-
-
     }
 
 
